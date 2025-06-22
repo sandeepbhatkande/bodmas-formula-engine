@@ -17,13 +17,13 @@ A powerful React component for building mathematical formulas with visual interf
 ## 🚀 Installation
 
 ```bash
-npm install bodmas-engine
+npm install bodmas-formula-engine
 ```
 
 or
 
 ```bash
-yarn add bodmas-engine
+yarn add bodmas-formula-engine
 ```
 
 ## 📖 Quick Start
@@ -32,7 +32,7 @@ yarn add bodmas-engine
 
 ```jsx
 import React, { useState } from 'react';
-import { FormulaBuilder } from 'bodmas-engine';
+import { FormulaBuilder } from 'bodmas-formula-engine';
 
 function App() {
   const [formula, setFormula] = useState('');
@@ -65,7 +65,7 @@ function App() {
 
 ```jsx
 import React, { useState } from 'react';
-import { FormulaBuilder } from 'bodmas-engine';
+import { FormulaBuilder } from 'bodmas-formula-engine';
 
 function App() {
   const [formula, setFormula] = useState('');
@@ -207,7 +207,7 @@ IF(quantity >= 10, price * 0.9, IF(quantity >= 5, price * 0.95, price))
 ### Custom Variable Panel
 
 ```jsx
-import { CustomVariablePanel } from 'bodmas-engine';
+import { CustomVariablePanel } from 'bodmas-formula-engine';
 
 function MyCustomPanel({ variables, onVariableInsert }) {
   return (
