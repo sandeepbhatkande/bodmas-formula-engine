@@ -1,6 +1,6 @@
 {
   "name": "bodmas-formula-engine",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A powerful React component for building mathematical formulas with visual interface, real-time validation, and comprehensive function library",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
