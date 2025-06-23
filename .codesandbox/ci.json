@@ -1,0 +1,20 @@
+{
+  "buildCommand": "build",
+  "sandboxes": [
+    {
+      "name": "Basic Usage",
+      "directory": "examples/basic-usage",
+      "template": "create-react-app"
+    },
+    {
+      "name": "Custom Functions", 
+      "directory": "examples/custom-functions",
+      "template": "create-react-app"
+    },
+    {
+      "name": "E-commerce Calculator",
+      "directory": "examples/ecommerce-calculator", 
+      "template": "create-react-app"
+    }
+  ]
+} 

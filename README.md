@@ -1,265 +1,205 @@
-# BODMAS Formula Builder
+# BODMAS Formula Engine
 
-A powerful React component for building mathematical formulas with visual interface, real-time validation, and comprehensive function library. Perfect for creating Excel-like formula builders in your React applications.
+A powerful React component for building mathematical formulas with visual interface, real-time validation, and comprehensive function library.
+
+## 🚀 Live Demo
+
+**[Try the Interactive Demo →](https://sandeepbhatkande.github.io/bodmas-formula-engine)**
+
+### Quick Examples
+- **[Basic Usage](https://codesandbox.io/s/bodmas-basic-usage)** - Simple integration
+- **[Custom Functions](https://codesandbox.io/s/bodmas-custom-functions)** - Business logic functions  
+- **[E-commerce Calculator](https://codesandbox.io/s/bodmas-ecommerce)** - Real-world pricing calculator
 
 ## ✨ Features
 
-- **Visual Formula Construction**: Build formulas through drag-and-drop, clickable buttons, or direct text input
-- **Real-time Validation**: Instant syntax checking with helpful error messages
-- **BODMAS Compliance**: Automatic operator precedence handling
-- **Syntax Highlighting**: Monaco Editor integration with custom formula language support
-- **Autocomplete**: Intelligent function and parameter suggestions
-- **70+ Built-in Functions**: String, Math, Statistical, Logical, Date, and Financial functions
-- **Custom Variables**: Define and use custom variables in formulas
-- **Material-UI Integration**: Modern, responsive design with theme support
-- **TypeScript Ready**: Full TypeScript support (coming soon)
+- 🎯 **Visual Formula Builder** - Drag-and-drop interface
+- ⚡ **Real-time Validation** - Instant feedback
+- 🧮 **70+ Built-in Functions** - Math, String, Date, Financial, Statistical
+- 🎨 **Material-UI Integration** - Beautiful, responsive design
+- 🔧 **Extensible** - Custom functions and variables
+- 📱 **Mobile Friendly** - Works on all devices
+- 🎪 **Monaco Editor** - Professional code editor with syntax highlighting
 
-## 🚀 Installation
+## 📦 Installation
 
 ```bash
 npm install bodmas-formula-engine
 ```
 
-or
-
+Install peer dependencies:
 ```bash
-yarn add bodmas-formula-engine
+npm install react react-dom @mui/material @emotion/react @emotion/styled @mui/icons-material @mui/lab
 ```
 
-## 📖 Quick Start
-
-### Basic Usage
+## 🎮 Quick Start
 
 ```jsx
 import React, { useState } from 'react';
 import { FormulaBuilder } from 'bodmas-formula-engine';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+
+const theme = createTheme();
 
 function App() {
   const [formula, setFormula] = useState('');
-  const [variables] = useState({
-    price: 100,
-    quantity: 5,
-    discount: 0.1,
-    taxRate: 0.08
-  });
+  const variables = { 
+    price: 100, 
+    quantity: 5, 
+    discount: 0.1 
+  };
 
   const handleFormulaChange = (newFormula, validation) => {
     setFormula(newFormula);
-    console.log('Formula is valid:', validation.valid);
     if (validation.valid) {
       console.log('Result:', validation.result);
     }
   };
 
   return (
-    <FormulaBuilder
-      initialFormula={formula}
-      onFormulaChange={handleFormulaChange}
-      variables={variables}
-    />
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <FormulaBuilder
+        initialFormula={formula}
+        onFormulaChange={handleFormulaChange}
+        variables={variables}
+      />
+    </ThemeProvider>
   );
 }
+
+export default App;
 ```
 
-### Advanced Usage with Custom Functions
+## 🎯 Use Cases
+
+- **E-commerce**: Dynamic pricing calculators
+- **Finance**: Investment and loan calculators  
+- **Analytics**: Custom metric calculations
+- **Business Rules**: Complex business logic
+- **Reporting**: Dynamic report formulas
+- **Configuration**: User-defined calculations
+
+## 📚 Examples
+
+Explore comprehensive examples in the `/examples` directory:
+
+### [Basic Usage](./examples/basic-usage)
+```jsx
+// Simple price calculation
+price * quantity * (1 - discount)
+```
+
+### [Custom Functions](./examples/custom-functions)
+```jsx
+// Business logic functions
+DISCOUNT(price, customerType) + LOYALTY_BONUS(points)
+```
+
+### [E-commerce Calculator](./examples/ecommerce-calculator)
+```jsx
+// Complex pricing with multiple factors
+(basePrice * quantity * SEASONAL_MULTIPLIER(period) * (1 - TIER_DISCOUNT(tier))) +
+SHIPPING_COST(weight, destination) - COUPON_DISCOUNT(code, orderValue)
+```
+
+## 🔧 Advanced Usage
+
+### Custom Functions
+```jsx
+const customFunctions = {
+  DISCOUNT: {
+    name: 'DISCOUNT',
+    description: 'Calculate discount based on customer type',
+    execute: (amount, customerType) => {
+      const rates = { VIP: 0.2, REGULAR: 0.1 };
+      return amount * (rates[customerType] || 0);
+    }
+  }
+};
+
+<FormulaBuilder customFunctions={customFunctions} />
+```
+
+### Custom Variables
+```jsx
+const CustomVariablePanel = ({ onVariableSelect }) => (
+  <div>
+    <button onClick={() => onVariableSelect('customVar')}>
+      Custom Variable
+    </button>
+  </div>
+);
+
+<FormulaBuilder 
+  CustomVariableComponent={CustomVariablePanel}
+  variables={{ customVar: 42 }}
+/>
+```
+
+## 🎨 Theming
 
 ```jsx
-import React, { useState } from 'react';
-import { FormulaBuilder } from 'bodmas-formula-engine';
+const theme = createTheme({
+  palette: {
+    primary: { main: '#1976d2' },
+    secondary: { main: '#dc004e' }
+  }
+});
 
-function App() {
-  const [formula, setFormula] = useState('');
-  const [variables] = useState({
-    price: 100,
-    quantity: 5,
-    customerType: 'VIP'
-  });
-
-  const customFunctions = {
-    DISCOUNT: {
-      name: 'DISCOUNT',
-      description: 'Calculate discount based on customer type',
-      category: 'Custom',
-      syntax: 'DISCOUNT(amount, customerType)',
-      examples: ['DISCOUNT(100, "VIP")'],
-      execute: (amount, customerType) => {
-        const discountRates = { VIP: 0.2, REGULAR: 0.1, NEW: 0.05 };
-        return amount * (discountRates[customerType] || 0);
-      }
-    }
-  };
-
-  return (
-    <FormulaBuilder
-      initialFormula={formula}
-      onFormulaChange={(formula, validation) => {
-        setFormula(formula);
-        console.log('Result:', validation.result);
-      }}
-      variables={variables}
-      customFunctions={customFunctions}
-    />
-  );
-}
+<ThemeProvider theme={theme}>
+  <FormulaBuilder />
+</ThemeProvider>
 ```
 
-## 🔧 Props
+## 📖 API Reference
 
 ### FormulaBuilder Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `initialFormula` | `string` | `''` | Initial formula to display |
-| `onFormulaChange` | `function` | - | Callback when formula changes `(formula, validation) => void` |
-| `variables` | `object` | `{}` | Variables available in formulas |
-| `customFunctions` | `object` | `{}` | Custom functions to add |
-| `customVariables` | `object` | `{}` | Additional variables (merged with variables) |
-| `customVariableComponent` | `ReactNode` | - | Custom variable panel component |
-| `theme` | `'light' \| 'dark'` | `'light'` | Theme for the editor |
-| `height` | `string \| number` | `400` | Height of the formula builder |
-| `disabled` | `boolean` | `false` | Disable the formula builder |
-| `showPreview` | `boolean` | `true` | Show the preview panel |
-| `showValidation` | `boolean` | `true` | Show validation messages |
+| `initialFormula` | `string` | `''` | Initial formula value |
+| `onFormulaChange` | `function` | - | Callback when formula changes |
+| `variables` | `object` | `{}` | Available variables |
+| `customFunctions` | `object` | `{}` | Custom function definitions |
+| `CustomVariableComponent` | `component` | - | Custom variable panel |
+| `readOnly` | `boolean` | `false` | Read-only mode |
+| `showValidation` | `boolean` | `true` | Show validation panel |
+| `showPreview` | `boolean` | `true` | Show preview panel |
 
-### Validation Object
+### Built-in Functions
 
-The `onFormulaChange` callback receives a validation object with:
+#### Mathematical
+`ABS`, `CEIL`, `FLOOR`, `ROUND`, `SQRT`, `POW`, `LOG`, `EXP`, `SIN`, `COS`, `TAN`, `MIN`, `MAX`, `SUM`, `AVERAGE`
 
-```javascript
-{
-  valid: boolean,           // Whether the formula is valid
-  result: any,             // Calculated result (if valid)
-  error: string,           // Error message (if invalid)
-  suggestions: string[]    // Suggestions for fixing errors
-}
-```
+#### String Functions  
+`CONCAT`, `LEFT`, `RIGHT`, `MID`, `LEN`, `UPPER`, `LOWER`, `TRIM`, `REPLACE`, `FIND`
 
-## 📚 Built-in Functions
+#### Date Functions
+`NOW`, `TODAY`, `YEAR`, `MONTH`, `DAY`, `WEEKDAY`, `DATEDIFF`, `DATEADD`
 
-### Math Functions (22)
-- `SUM`, `AVERAGE`, `MIN`, `MAX`, `COUNT`
-- `ROUND`, `CEIL`, `FLOOR`, `ABS`, `SQRT`
-- `POWER`, `MOD`, `RANDOM`, `RANDBETWEEN`
-- `SIN`, `COS`, `TAN`, `LOG`, `LN`, `EXP`
-- `PI`, `E`
+#### Logical Functions
+`IF`, `AND`, `OR`, `NOT`, `ISBLANK`, `ISNUMBER`, `ISTEXT`
 
-### String Functions (12)
-- `CONCAT`, `LEFT`, `RIGHT`, `MID`, `LEN`
-- `UPPER`, `LOWER`, `TRIM`, `REPLACE`
-- `SUBSTITUTE`, `FIND`, `SEARCH`
-
-### Logical Functions (10)
-- `IF`, `AND`, `OR`, `NOT`, `XOR`
-- `ISNUMBER`, `ISTEXT`, `ISBLANK`, `ISERROR`
-- `CHOOSE`
-
-### Date Functions (13)
-- `NOW`, `TODAY`, `YEAR`, `MONTH`, `DAY`
-- `HOUR`, `MINUTE`, `SECOND`, `WEEKDAY`
-- `DATEDIF`, `DATEADD`, `DATEVALUE`, `TIMEVALUE`
-
-### Statistical Functions (6)
-- `STDEV`, `VAR`, `MEDIAN`, `MODE`
-- `PERCENTILE`, `QUARTILE`
-
-### Financial Functions (6)
-- `PMT`, `PV`, `FV`, `RATE`, `NPER`, `NPV`
-
-## 🎯 Examples
-
-### Basic Calculations
-```javascript
-2 + 3 * 4                    // Result: 14
-ROUND(3.14159, 2)            // Result: 3.14
-MAX(10, 20, 5)               // Result: 20
-```
-
-### String Operations
-```javascript
-CONCAT("Hello ", "World")     // Result: "Hello World"
-UPPER("hello")               // Result: "HELLO"
-LEFT("Hello World", 5)       // Result: "Hello"
-```
-
-### Conditional Logic
-```javascript
-IF(price > 100, "Expensive", "Affordable")
-AND(quantity > 5, price < 50)
-```
-
-### Date Functions
-```javascript
-YEAR(NOW())                  // Current year
-DATEDIF("2023-01-01", "2023-12-31", "D")  // Days between dates
-```
-
-### Complex Formulas
-```javascript
-// Calculate total with discount and tax
-price * quantity * (1 - discount) * (1 + taxRate)
-
-// Conditional pricing
-IF(quantity >= 10, price * 0.9, IF(quantity >= 5, price * 0.95, price))
-```
-
-## 🎨 Customization
-
-### Custom Variable Panel
-
-```jsx
-import { CustomVariablePanel } from 'bodmas-formula-engine';
-
-function MyCustomPanel({ variables, onVariableInsert }) {
-  return (
-    <div>
-      <h3>My Variables</h3>
-      {Object.entries(variables).map(([name, value]) => (
-        <button key={name} onClick={() => onVariableInsert(name)}>
-          {name}: {value}
-        </button>
-      ))}
-    </div>
-  );
-}
-
-// Use in FormulaBuilder
-<FormulaBuilder
-  customVariableComponent={<MyCustomPanel />}
-  // ... other props
-/>
-```
-
-### Custom Functions
-
-```jsx
-const customFunctions = {
-  CUSTOM_CALC: {
-    name: 'CUSTOM_CALC',
-    description: 'Custom calculation function',
-    category: 'Custom',
-    syntax: 'CUSTOM_CALC(value1, value2)',
-    examples: ['CUSTOM_CALC(10, 20)'],
-    execute: (val1, val2) => {
-      // Your custom logic here
-      return val1 * val2 + 10;
-    }
-  }
-};
-```
-
-## 🔧 Requirements
-
-- React >= 18.0.0
-- React DOM >= 18.0.0
-
-## 📝 License
-
-MIT © [Sandeep Bhatkande](https://github.com/sandeepbhatkande)
+#### Financial Functions
+`PV`, `FV`, `PMT`, `RATE`, `NPER`, `NPV`, `IRR`
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
-## 📞 Support
+## 📄 License
 
-If you have any questions or need help, please open an issue on [GitHub](https://github.com/sandeepbhatkande/bodmas-formula-engine/issues).
+MIT © [Sandeep Bhatkande](https://github.com/sandeepbhatkande)
+
+## 🔗 Links
+
+- [GitHub Repository](https://github.com/sandeepbhatkande/bodmas-formula-engine)
+- [Live Demo](https://sandeepbhatkande.github.io/bodmas-formula-engine)
+- [npm Package](https://www.npmjs.com/package/bodmas-formula-engine)
+- [Issues](https://github.com/sandeepbhatkande/bodmas-formula-engine/issues)
+
+---
+
+**Made with ❤️ for the React community**
