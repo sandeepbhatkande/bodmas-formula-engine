@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/bodmas-formula-engine/static/css/main.f5bea476.css",
+    "main.js": "/bodmas-formula-engine/static/js/main.7e79cb5c.js",
+    "static/js/453.a0bad4cb.chunk.js": "/bodmas-formula-engine/static/js/453.a0bad4cb.chunk.js",
+    "index.html": "/bodmas-formula-engine/index.html",
+    "main.f5bea476.css.map": "/bodmas-formula-engine/static/css/main.f5bea476.css.map",
+    "main.7e79cb5c.js.map": "/bodmas-formula-engine/static/js/main.7e79cb5c.js.map",
+    "453.a0bad4cb.chunk.js.map": "/bodmas-formula-engine/static/js/453.a0bad4cb.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f5bea476.css",
+    "static/js/main.7e79cb5c.js"
+  ]
+}
