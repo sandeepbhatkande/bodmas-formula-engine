@@ -798,7 +798,7 @@
     width: 100% !important;
     gap: 1.5rem !important;
     
-    @media (max-width: 960px) {
+    @media (max-width: 600px) {
       flex-wrap: wrap !important;
       
       .function-palette-container,
@@ -829,7 +829,7 @@
     width: 100% !important;
     gap: 1rem !important;
     
-    @media (max-width: 960px) {
+    @media (max-width: 600px) {
       flex-wrap: wrap !important;
       
       .validation-container,
@@ -866,13 +866,28 @@
   // CSS Grid Layout for better stability
   .formula-builder-layout {
     display: grid;
-    grid-template-columns: minmax(320px, 400px) 1fr;
+    grid-template-columns: minmax(280px, 350px) 1fr;
     grid-template-areas: "palette editor";
     gap: 1.5rem;
     width: 100%;
     align-items: start;
 
-    @media (max-width: 960px) {
+    // Force side-by-side layout for screens larger than 900px
+    @media (min-width: 901px) {
+      grid-template-columns: minmax(320px, 400px) 1fr;
+      
+      .function-palette-section {
+        min-width: 320px;
+        max-width: 400px;
+      }
+      
+      .main-editor-section {
+        min-width: 400px;
+      }
+    }
+
+    // Only stack vertically on mobile/tablet screens
+    @media (max-width: 600px) {
       grid-template-columns: 1fr;
       grid-template-areas: 
         "palette"
@@ -882,11 +897,11 @@
 
     .function-palette-section {
       grid-area: palette;
-      min-width: 320px;
-      max-width: 400px;
+      min-width: 280px;
+      max-width: 350px;
       width: 100%;
       
-      @media (max-width: 960px) {
+      @media (max-width: 600px) {
         min-width: 280px;
         max-width: none;
       }
@@ -894,10 +909,10 @@
 
     .main-editor-section {
       grid-area: editor;
-      min-width: 400px;
+      min-width: 350px;
       width: 100%;
       
-      @media (max-width: 960px) {
+      @media (max-width: 600px) {
         min-width: 280px;
       }
     }
@@ -912,7 +927,7 @@
     width: 100%;
     margin-top: 1rem;
 
-    @media (max-width: 960px) {
+    @media (max-width: 600px) {
       grid-template-columns: 1fr;
       grid-template-areas: 
         "validation"
