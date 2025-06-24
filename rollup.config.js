@@ -12,13 +12,13 @@ module.exports = {
       file: 'dist/index.js',
       format: 'cjs',
       exports: 'named',
-      sourcemap: true
+      sourcemap: false
     },
     {
       file: 'dist/index.esm.js',
       format: 'esm',
       exports: 'named',
-      sourcemap: true
+      sourcemap: false
     }
   ],
   plugins: [
