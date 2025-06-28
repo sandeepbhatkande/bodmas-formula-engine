@@ -10,6 +10,13 @@ import {
   TextField,
   InputAdornment,
   Tooltip,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  IconButton,
+  Divider,
+  Paper,
 } from '@mui/material';
 import {
   ExpandMore as ExpandMoreIcon,
@@ -21,6 +28,8 @@ import {
   TrendingUp as TrendingUpIcon,
   AccountBalance as AccountBalanceIcon,
   Build as BuildIcon,
+  Info as InfoIcon,
+  Close as CloseIcon,
 } from '@mui/icons-material';
 
 const FunctionPalette = ({ 
@@ -33,6 +42,8 @@ const FunctionPalette = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [expandedPanel, setExpandedPanel] = useState('string');
+  const [helpDialogOpen, setHelpDialogOpen] = useState(false);
+  const [selectedFunction, setSelectedFunction] = useState(null);
 
   // Dynamically build function categories from engine metadata
   const functionCategories = useMemo(() => {
@@ -169,6 +180,17 @@ const FunctionPalette = ({
     onVariableInsert(variable);
   };
 
+  const handleHelpClick = (func, event) => {
+    event.stopPropagation();
+    setSelectedFunction(func);
+    setHelpDialogOpen(true);
+  };
+
+  const handleHelpClose = () => {
+    setHelpDialogOpen(false);
+    setSelectedFunction(null);
+  };
+
   // Sort categories by order
   const sortedCategories = Object.entries(filteredCategories).sort(([,a], [,b]) => 
     (a.order || 99) - (b.order || 99)
@@ -276,7 +298,7 @@ const FunctionPalette = ({
               <AccordionDetails>
                 <Box display="flex" flexDirection="column" gap={1}>
                   {category.functions.map((func) => (
-                    <Box key={func.name}>
+                    <Box key={func.name} sx={{ position: 'relative' }}>
                       <Button
                         fullWidth
                         size="small"
@@ -285,7 +307,8 @@ const FunctionPalette = ({
                         sx={{ 
                           justifyContent: 'flex-start',
                           textTransform: 'none',
-                          mb: 0.5
+                          mb: 0.5,
+                          pr: 5, // Add padding to make room for help icon
                         }}
                       >
                         <Box sx={{ textAlign: 'left', width: '100%' }}>
@@ -297,6 +320,21 @@ const FunctionPalette = ({
                           </Typography>
                         </Box>
                       </Button>
+                      <Tooltip title="Function Help" placement="top">
+                        <IconButton
+                          size="small"
+                          onClick={(e) => handleHelpClick(func, e)}
+                          className="function-help-icon"
+                          sx={{
+                            position: 'absolute',
+                            top: 4,
+                            right: 4,
+                            zIndex: 1,
+                          }}
+                        >
+                          <InfoIcon fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
                     </Box>
                   ))}
                 </Box>
@@ -305,6 +343,100 @@ const FunctionPalette = ({
           ))}
         </Box>
       </Box>
+
+      {/* Help Dialog */}
+      <Dialog
+        open={helpDialogOpen}
+        onClose={handleHelpClose}
+        maxWidth="md"
+        fullWidth
+      >
+        <DialogTitle>
+          <Box display="flex" justifyContent="space-between" alignItems="center">
+            <Typography variant="h6">
+              Function Help: {selectedFunction?.name}
+            </Typography>
+            <IconButton
+              onClick={handleHelpClose}
+              size="small"
+            >
+              <CloseIcon />
+            </IconButton>
+          </Box>
+        </DialogTitle>
+        <DialogContent>
+          {selectedFunction && (
+            <Box>
+              <Paper elevation={1} sx={{ p: 2, mb: 2 }}>
+                <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'bold' }}>
+                  Signature
+                </Typography>
+                <Typography variant="body1" sx={{ fontFamily: 'monospace', backgroundColor: 'grey.100', p: 1, borderRadius: 1 }}>
+                  {selectedFunction.signature}
+                </Typography>
+              </Paper>
+
+              <Paper elevation={1} sx={{ p: 2, mb: 2 }}>
+                <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'bold' }}>
+                  Description
+                </Typography>
+                <Typography variant="body1">
+                  {selectedFunction.description}
+                </Typography>
+              </Paper>
+
+              {selectedFunction.example && (
+                <Paper elevation={1} sx={{ p: 2, mb: 2 }}>
+                  <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'bold' }}>
+                    Example
+                  </Typography>
+                  <Typography variant="body1" sx={{ fontFamily: 'monospace', backgroundColor: 'grey.100', p: 1, borderRadius: 1 }}>
+                    {selectedFunction.example}
+                  </Typography>
+                </Paper>
+              )}
+
+              {selectedFunction.returnType && (
+                <Paper elevation={1} sx={{ p: 2, mb: 2 }}>
+                  <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'bold' }}>
+                    Return Type
+                  </Typography>
+                  <Chip 
+                    label={selectedFunction.returnType} 
+                    size="small" 
+                    color="primary" 
+                    variant="outlined"
+                  />
+                </Paper>
+              )}
+
+              <Paper elevation={1} sx={{ p: 2 }}>
+                <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'bold' }}>
+                  Parameters
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {selectedFunction.signature?.match(/\((.*?)\)/)?.[1] || 'No parameters'}
+                </Typography>
+              </Paper>
+            </Box>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button 
+            onClick={() => {
+              handleFunctionClick(selectedFunction);
+              handleHelpClose();
+            }}
+            variant="contained"
+            disabled={!selectedFunction}
+          >
+            Insert Function
+          </Button>
+          <Button onClick={handleHelpClose}>
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
